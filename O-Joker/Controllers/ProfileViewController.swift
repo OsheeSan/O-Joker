@@ -22,6 +22,8 @@ class ProfileViewController: UIViewController {
     }
     
     
+    @IBOutlet weak var profileImage: UIImageView!
+    
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var likesLabel: UILabel!
@@ -30,20 +32,39 @@ class ProfileViewController: UIViewController {
     
     var Jokes: [Joke] = []
     
-    var ref = DatabaseReference.init()
-    
     var userName = ""
     var likesCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ref = Database.database().reference()
         loadUserJokes()
+        loadUser()
+    }
+    
+    func loadUser(){
+        profileImage.clipsToBounds = true
+        profileImage.layer.cornerRadius = profileImage.frame.height/2
+        var ref = Database.database().reference().child("users").child("\(Auth.auth().currentUser!.uid)").child("profileImageURL")
+        _ = ref.observe(.value, with: {snapshot in
+            print("1")
+            if let value = snapshot.value as? String {
+                print("2")
+                print(value)
+                if let url = URL(string: value){
+                    URLSession.shared.dataTask(with: url) { (data, response, error) in
+                        DispatchQueue.main.async {
+                            guard let imageData = data else { return }
+                            self.profileImage.image = UIImage(data: imageData)
+                            self.tableView.reloadData()
+                        }
+                    }.resume()
+                }
+            }
+        })
     }
     
     func loadUserJokes(){
         let jokesRef = Database.database().reference().child("jokes")
-        
         _ = jokesRef.observe(.value, with: { snapshot  in
             self.Jokes = []
             self.likesCount = 0
@@ -68,8 +89,6 @@ class ProfileViewController: UIViewController {
                     print("Joke added")
                 }
             }
-            
-            
             self.tableView.reloadData()
             self.likesLabel.text = String("Likes : \(self.likesCount)")
         })
@@ -102,6 +121,10 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         let text = cell.viewWithTag(2) as! UITextView
         let likesCount = cell.viewWithTag(3) as! UILabel
         let likeButton = cell.viewWithTag(4) as! UIButton
+        let profileImageView = cell.viewWithTag(5) as! UIImageView
+        profileImageView.clipsToBounds=true
+        profileImageView.layer.cornerRadius = profileImageView.frame.height/2
+        profileImageView.image = profileImage.image
         if let currentUserID = Auth.auth().currentUser?.uid {
                 let likesRef = Database.database().reference(withPath: "jokes/\(joke.id)/likes/\(currentUserID)")
                 likesRef.observeSingleEvent(of: .value, with: { snapshot in

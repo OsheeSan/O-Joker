@@ -170,7 +170,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="246"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="EQ8-dx-ZTC">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="EQ8-dx-ZTC">
                                                     <rect key="frame" x="16" y="11" width="40" height="39"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="40" id="6xx-cn-Aa8"/>
@@ -198,7 +198,7 @@
                                                     <rect key="frame" x="264" y="193" width="40" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="Na8-8K-Zgq"/>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="Osh-b5-DY8"/>
+                                                        <constraint firstAttribute="width" constant="40" id="Osh-b5-DY8"/>
                                                     </constraints>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" title="">
@@ -301,7 +301,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="246"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ir5-U6-Wfq">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ir5-U6-Wfq">
                                                     <rect key="frame" x="16" y="11" width="40" height="39"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="40" id="4Px-wh-SF4"/>
@@ -410,6 +410,7 @@
                     <tabBarItem key="tabBarItem" title="" image="person.circle" catalog="system" id="iPx-7b-BrZ"/>
                     <connections>
                         <outlet property="likesLabel" destination="A8U-RL-ly7" id="kCv-fe-llM"/>
+                        <outlet property="profileImage" destination="KfD-fi-ey8" id="kAg-oB-maD"/>
                         <outlet property="tableView" destination="8Ft-vF-pR3" id="kMy-w8-SoK"/>
                         <outlet property="usernameLabel" destination="lC9-Ls-eqa" id="Fym-jg-qeW"/>
                     </connections>
@@ -476,11 +477,12 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lYI-zh-nD4">
-                                <rect key="frame" x="117.5" y="95" width="85" height="85"/>
+                                <rect key="frame" x="110" y="92" width="100" height="106"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="85" id="RXS-KC-GKb"/>
-                                    <constraint firstAttribute="height" constant="85" id="kca-02-NuQ"/>
+                                    <constraint firstAttribute="width" constant="100" id="RXS-KC-GKb"/>
+                                    <constraint firstAttribute="height" constant="100" id="kca-02-NuQ"/>
                                 </constraints>
+                                <imageReference key="image" image="person.circle" catalog="system" symbolScale="large"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="5hS-6P-IFR"/>
@@ -544,7 +546,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="nid-AB-6JP"/>
+        <segue reference="M8y-Yd-nhd"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="heart" catalog="system" width="128" height="107"/>
