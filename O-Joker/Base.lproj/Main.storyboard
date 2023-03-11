@@ -5,27 +5,12 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
-        <scene sceneID="laI-en-L0s">
-            <objects>
-                <navigationController id="wiJ-6V-MAs" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="JL9-Ke-g7y">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="ogE-oZ-d1u" kind="relationship" relationship="rootViewController" id="USb-QE-IN4"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="TNq-LE-lYF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1352" y="2"/>
-        </scene>
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -64,10 +49,10 @@
                                     <action selector="loginButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="b4f-hU-pSj"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8xe-GB-dRW">
-                                <rect key="frame" x="117" y="481" width="87" height="35"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Register"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8xe-GB-dRW" customClass="BigButton" customModule="O_Joker" customModuleProvider="target">
+                                <rect key="frame" x="117" y="486" width="87" height="30"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Register"/>
                                 <connections>
                                     <segue destination="DtX-Ob-1Z9" kind="show" id="0mn-Ol-LNQ"/>
                                 </connections>
@@ -100,7 +85,7 @@
                     <connections>
                         <outlet property="emailTextField" destination="ro8-qS-ZFl" id="0la-qo-BID"/>
                         <outlet property="passwordTextfield" destination="tCV-3h-xfX" id="Ju2-Fz-NoA"/>
-                        <segue destination="wiJ-6V-MAs" kind="modal" identifier="login" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="nid-AB-6JP"/>
+                        <segue destination="ogE-oZ-d1u" kind="modal" identifier="login" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="yTm-Oh-mFP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -115,17 +100,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="XV6-Hw-h5w">
-                                <rect key="frame" x="16" y="44" width="288" height="128"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="XV6-Hw-h5w" customClass="JokeTextView" customModule="O_Joker" customModuleProvider="target">
+                                <rect key="frame" x="16" y="44" width="288" height="84"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmF-7n-8HL">
-                                <rect key="frame" x="126" y="193" width="68" height="35"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Share"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmF-7n-8HL" customClass="BigButton" customModule="O_Joker" customModuleProvider="target">
+                                <rect key="frame" x="140" y="149" width="40" height="30"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Share"/>
                                 <connections>
                                     <action selector="createJokeButtonPressed:" destination="p84-4n-7mO" eventType="touchUpInside" id="J0I-FW-oAV"/>
                                 </connections>
@@ -160,7 +145,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="N4T-PH-JVu" customClass="JokesTableView" customModule="O_Joker" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44" width="320" height="475"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="569"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="joke" rowHeight="246" id="aEf-aF-pP2" customClass="JokeTableViewCell" customModule="O_Joker" customModuleProvider="target">
@@ -172,6 +157,7 @@
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="EQ8-dx-ZTC">
                                                     <rect key="frame" x="16" y="11" width="40" height="39"/>
+                                                    <color key="tintColor" systemColor="systemYellowColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="40" id="6xx-cn-Aa8"/>
                                                         <constraint firstAttribute="height" constant="40" id="HfL-Dm-MLa"/>
@@ -186,7 +172,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="scaleAspectFit" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jfr-sI-cMe">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="scaleAspectFit" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jfr-sI-cMe" customClass="JokeTextView" customModule="O_Joker" customModuleProvider="target">
                                                     <rect key="frame" x="16" y="68.5" width="288" height="116.5"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <string key="text">bfdddddbfbsknbnobiobivipnavpanvfnsdinvifnivnivnitnribnspiptsnbsbnpsrtnbptrnbsibnsipnbsipnbptnb[osots[nso[bm[smb[omsb[mtobmso[motnbonspbtnsontomnbtmmdrbm.,rm,.mf,b,fgxnbnxfngnfgnntdrhmdfkbgnfkhndnhtlnblkndmlkbnmlkgdnlbldgnk</string>
@@ -200,6 +186,7 @@
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="Na8-8K-Zgq"/>
                                                         <constraint firstAttribute="width" constant="40" id="Osh-b5-DY8"/>
                                                     </constraints>
+                                                    <color key="tintColor" systemColor="systemYellowColor"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" title="">
                                                         <imageReference key="image" image="heart" catalog="system" symbolScale="large"/>
@@ -244,10 +231,10 @@
                         <viewLayoutGuide key="safeArea" id="6Bc-ue-1nN"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="N4T-PH-JVu" secondAttribute="bottom" constant="-1" id="31p-Ne-X1V"/>
                             <constraint firstItem="N4T-PH-JVu" firstAttribute="top" secondItem="6Bc-ue-1nN" secondAttribute="top" id="EQ7-s4-jwk"/>
                             <constraint firstItem="6Bc-ue-1nN" firstAttribute="trailing" secondItem="N4T-PH-JVu" secondAttribute="trailing" id="ERv-hz-1Zp"/>
                             <constraint firstItem="N4T-PH-JVu" firstAttribute="leading" secondItem="6Bc-ue-1nN" secondAttribute="leading" id="dBv-Qa-8Ha"/>
-                            <constraint firstItem="6Bc-ue-1nN" firstAttribute="bottom" secondItem="N4T-PH-JVu" secondAttribute="bottom" id="mde-Wj-Bl4"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="house" catalog="system" id="Xeg-bU-HEp"/>
@@ -281,14 +268,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="8Ft-vF-pR3" customClass="JokesTableView" customModule="O_Joker" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="234" width="320" height="285"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="8Ft-vF-pR3" customClass="JokesTableView" customModule="O_Joker" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="234" width="320" height="335"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <button key="tableHeaderView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="iGW-yW-6vo">
+                                <button key="tableHeaderView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="iGW-yW-6vo" customClass="BigButton" customModule="O_Joker" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" title="Add Joke"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                    <state key="normal" title="Add Joke"/>
                                     <connections>
                                         <segue destination="p84-4n-7mO" kind="show" id="CWu-Dg-fkc"/>
                                     </connections>
@@ -303,6 +290,7 @@
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ir5-U6-Wfq">
                                                     <rect key="frame" x="16" y="11" width="40" height="39"/>
+                                                    <color key="tintColor" systemColor="systemYellowColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="40" id="4Px-wh-SF4"/>
                                                         <constraint firstAttribute="height" constant="40" id="pzO-Oo-fVE"/>
@@ -317,7 +305,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="scaleAspectFit" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sJc-fs-iG4">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="scaleAspectFit" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sJc-fs-iG4" customClass="JokeTextView" customModule="O_Joker" customModuleProvider="target">
                                                     <rect key="frame" x="16" y="68.5" width="288" height="116.5"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <string key="text">bfdddddbfbsknbnobiobivipnavpanvfnsdinvifnivnivnitnribnspiptsnbsbnpsrtnbptrnbsibnsipnbsipnbptnb[osots[nso[bm[smb[omsb[mtobmso[motnbonspbtnsontomnbtmmdrbm.,rm,.mf,b,fgxnbnxfngnfgnntdrhmdfkbgnfkhndnhtlnblkndmlkbnmlkgdnlbldgnk</string>
@@ -331,6 +319,7 @@
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="PLk-eK-fmf"/>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="lpK-Tl-yUo"/>
                                                     </constraints>
+                                                    <color key="tintColor" name="AccentColor"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" title="">
                                                         <imageReference key="image" image="heart" catalog="system" symbolScale="large"/>
@@ -377,37 +366,39 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XKn-Qi-sz3">
-                                <rect key="frame" x="0.0" y="60" width="100" height="35"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="RbI-Yv-qRW"/>
-                                    <constraint firstAttribute="width" constant="100" id="j2M-IR-oeZ"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Quit"/>
-                                <connections>
-                                    <action selector="quit:" destination="HIk-Cd-yNu" eventType="touchUpInside" id="czH-GC-kl7"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="s8y-eG-HEU"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="lC9-Ls-eqa" firstAttribute="centerX" secondItem="0iB-m0-vgh" secondAttribute="centerX" id="3W0-hA-deR"/>
-                            <constraint firstItem="XKn-Qi-sz3" firstAttribute="top" secondItem="s8y-eG-HEU" secondAttribute="top" constant="16" id="3hl-AO-RNt"/>
                             <constraint firstItem="KfD-fi-ey8" firstAttribute="centerX" secondItem="0iB-m0-vgh" secondAttribute="centerX" id="5Ek-e4-f8E"/>
+                            <constraint firstAttribute="bottom" secondItem="8Ft-vF-pR3" secondAttribute="bottom" constant="-1" id="9Ht-9X-wRs"/>
                             <constraint firstItem="A8U-RL-ly7" firstAttribute="centerX" secondItem="0iB-m0-vgh" secondAttribute="centerX" id="AyQ-AJ-wHG"/>
                             <constraint firstItem="KfD-fi-ey8" firstAttribute="top" secondItem="s8y-eG-HEU" secondAttribute="top" id="Gqu-YR-CTB"/>
                             <constraint firstItem="8Ft-vF-pR3" firstAttribute="top" secondItem="A8U-RL-ly7" secondAttribute="bottom" constant="28" id="IU3-1c-hav"/>
                             <constraint firstItem="lC9-Ls-eqa" firstAttribute="top" secondItem="KfD-fi-ey8" secondAttribute="bottom" constant="22" id="LaY-fQ-9Zg"/>
-                            <constraint firstItem="XKn-Qi-sz3" firstAttribute="leading" secondItem="0iB-m0-vgh" secondAttribute="leading" id="bh4-ll-92O"/>
                             <constraint firstItem="8Ft-vF-pR3" firstAttribute="leading" secondItem="s8y-eG-HEU" secondAttribute="leading" id="brb-wE-EZG"/>
                             <constraint firstItem="8Ft-vF-pR3" firstAttribute="trailing" secondItem="s8y-eG-HEU" secondAttribute="trailing" id="kiw-kh-7ic"/>
-                            <constraint firstItem="8Ft-vF-pR3" firstAttribute="bottom" secondItem="s8y-eG-HEU" secondAttribute="bottom" id="oPI-4Y-Vgq"/>
                             <constraint firstItem="A8U-RL-ly7" firstAttribute="top" secondItem="lC9-Ls-eqa" secondAttribute="bottom" constant="8" symbolic="YES" id="wQz-LA-Lyp"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="person.circle" catalog="system" id="iPx-7b-BrZ"/>
+                    <navigationItem key="navigationItem" id="GYQ-hT-z5l">
+                        <barButtonItem key="rightBarButtonItem" image="gear" catalog="system" style="plain" id="u3K-E1-czn">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="qfB-T8-h06">
+                                <rect key="frame" x="229" y="4.5" width="75" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" systemColor="systemYellowColor"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="gear" catalog="system" symbolScale="large"/>
+                                </state>
+                                <connections>
+                                    <action selector="quit:" destination="HIk-Cd-yNu" eventType="touchUpInside" id="Oir-KA-Tpf"/>
+                                </connections>
+                            </button>
+                            <color key="tintColor" systemColor="systemYellowColor"/>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="likesLabel" destination="A8U-RL-ly7" id="kCv-fe-llM"/>
                         <outlet property="profileImage" destination="KfD-fi-ey8" id="kAg-oB-maD"/>
@@ -417,7 +408,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oqE-eo-IRX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3157.5" y="793.30985915492954"/>
+            <point key="canvasLocation" x="4155" y="793.30985915492954"/>
         </scene>
         <!--Register View Controller-->
         <scene sceneID="UFF-ml-ppV">
@@ -478,6 +469,7 @@
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lYI-zh-nD4">
                                 <rect key="frame" x="110" y="92" width="100" height="106"/>
+                                <color key="tintColor" systemColor="systemYellowColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="RXS-KC-GKb"/>
                                     <constraint firstAttribute="height" constant="100" id="kca-02-NuQ"/>
@@ -517,7 +509,7 @@
                         <outlet property="registerButton" destination="2z6-hh-b23" id="36U-Xa-HYC"/>
                         <outlet property="repeatPasswordTextField" destination="2v5-u6-llq" id="hxx-AS-Lcp"/>
                         <outlet property="usernameTextField" destination="2ot-kQ-gOR" id="s8S-gG-tsK"/>
-                        <segue destination="wiJ-6V-MAs" kind="modal" identifier="register" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="M8y-Yd-nhd"/>
+                        <segue destination="ogE-oZ-d1u" kind="modal" identifier="register" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="Zrt-dP-NKA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PBW-pH-Tq8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -534,29 +526,61 @@
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" name="AccentColor"/>
+                        <color key="barTintColor" systemColor="systemGray6Color"/>
+                        <color key="selectedImageTintColor" systemColor="systemYellowColor"/>
                     </tabBar>
                     <connections>
                         <segue destination="E5z-E5-iHF" kind="relationship" relationship="viewControllers" id="NkP-m7-UO3"/>
-                        <segue destination="HIk-Cd-yNu" kind="relationship" relationship="viewControllers" id="d5N-fh-wqI"/>
+                        <segue destination="zK7-yf-ohp" kind="relationship" relationship="viewControllers" id="d5N-fh-wqI"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SbA-C8-niL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2160" y="2.112676056338028"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="uXn-01-V9h">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zK7-yf-ohp" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="person.circle" catalog="system" id="iPx-7b-BrZ"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ysf-8F-VKv">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="HIk-Cd-yNu" kind="relationship" relationship="rootViewController" id="llT-YX-g8N"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eyf-QH-P1A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3157.5" y="793.30985915492954"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="M8y-Yd-nhd"/>
+        <segue reference="Zrt-dP-NKA"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="gear" catalog="system" width="128" height="122"/>
         <image name="heart" catalog="system" width="128" height="107"/>
         <image name="house" catalog="system" width="128" height="104"/>
         <image name="person.circle" catalog="system" width="128" height="123"/>
+        <namedColor name="AccentColor">
+            <color red="1" green="0.79199999570846558" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="labelColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

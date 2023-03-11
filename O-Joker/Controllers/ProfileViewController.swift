@@ -36,6 +36,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         loadUserJokes()
         loadUser()
+        view.backgroundColor = UIColor(cgColor: CGColor(red: 25/255, green: 26/255, blue: 30/255, alpha: 1))
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -110,13 +111,17 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return Jokes.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "joke") as! JokeTableViewCell
-        let joke = Jokes[Jokes.count-1 - indexPath.row]
+        let joke = Jokes[Jokes.count-1 - indexPath.section]
         let username = cell.viewWithTag(1) as! UILabel
         let text = cell.viewWithTag(2) as! UITextView
         let likesCount = cell.viewWithTag(3) as! UILabel
@@ -125,7 +130,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         profileImageView.clipsToBounds=true
         profileImageView.layer.cornerRadius = profileImageView.frame.height/2
         profileImageView.image = profileImage.image
-
 //        if let currentUserID = Auth.auth().currentUser?.uid {
 //                let likesRef = Database.database().reference(withPath: "jokes/\(joke.id)/likes/\(currentUserID)")
 //                likesRef.observeSingleEvent(of: .value, with: { snapshot in
@@ -160,7 +164,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     @objc func likeTap(_ sender: UIButton) {
         guard let indexPath = self.tableView.indexPath(for: sender.superview!.superview! as! JokeTableViewCell) else { return }
-        let joke = Jokes[Jokes.count-1 - indexPath.row]
+        let joke = Jokes[Jokes.count-1 - indexPath.section]
         DataService().like(joke: joke, button: sender, tableView: self.tableView, indexPath: indexPath)
     }
     
@@ -168,4 +172,18 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         return UITableView.automaticDimension
     }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 2.5
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = .clear
+//
+//        // Add some space between each header view
+//        let spacingView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 10))
+//        spacingView.backgroundColor = .clear
+//        headerView.addSubview(spacingView)
+        
+        return headerView
+    }
 }

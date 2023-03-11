@@ -66,18 +66,18 @@ class RegisterViewController: UIViewController {
                     self.ref.child("users").child(uid).setValue(user)
                 })
             })
-        }
-        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
-                if let error = error {
-                    print("Error signing in: \(error.localizedDescription)")
-                    return
+            Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
+                    if let error = error {
+                        print("Error signing in: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    // User signed in successfully
+                    print("User signed in with UID: \(result!.user.uid)")
+                self.performSegue(withIdentifier: "register", sender: self.registerButton)
                 }
-                
-                // User signed in successfully
-                print("User signed in with UID: \(result!.user.uid)")
-            }
-        
-        performSegue(withIdentifier: "register", sender: registerButton)
+            
+        }
     }
     
     var ref = DatabaseReference.init()
@@ -85,6 +85,7 @@ class RegisterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardRecognizer()
+        view.backgroundColor = UIColor(cgColor: CGColor(red: 25/255, green: 26/255, blue: 30/255, alpha: 1))
         self.ref = Database.database().reference()
         setupProfileImage()
     }
