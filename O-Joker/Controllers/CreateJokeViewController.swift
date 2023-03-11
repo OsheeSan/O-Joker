@@ -9,7 +9,7 @@ import UIKit
 import Firebase
 
 class CreateJokeViewController: UIViewController {
-
+    
     @IBOutlet var jokeTextView: UITextView!
         
         override func viewDidLoad() {

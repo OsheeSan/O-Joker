@@ -9,8 +9,6 @@ import UIKit
 import Firebase
 
 class ProfileViewController: UIViewController {
-    
-    
 
     @IBAction func quit(_ sender: UIButton) {
         do { try Auth.auth().signOut()
@@ -20,7 +18,6 @@ class ProfileViewController: UIViewController {
         print("tap")
         self.dismiss(animated: true)
     }
-    
     
     @IBOutlet weak var profileImage: UIImageView!
     
@@ -39,6 +36,10 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         loadUserJokes()
         loadUser()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        tableView.reloadData()
     }
     
     func loadUser(){
@@ -65,7 +66,7 @@ class ProfileViewController: UIViewController {
     
     func loadUserJokes(){
         let jokesRef = Database.database().reference().child("jokes")
-        _ = jokesRef.observe(.value, with: { snapshot  in
+        jokesRef.observeSingleEvent(of: .value, with: { snapshot  in
             self.Jokes = []
             self.likesCount = 0
             for child in snapshot.children {
@@ -82,7 +83,6 @@ class ProfileViewController: UIViewController {
                     return
                 }
                 let joke = Joke(id: jokeSnapshot.key, text: text as! String, authorUID: author_uid as! String, likes:likes as! [String: Bool], author: author as! String)
-                print(text)
                 if author_uid as! String == Auth.auth().currentUser!.uid {
                     self.Jokes.append(joke)
                     self.likesCount += (likes as! [String: Bool]).count-1
@@ -102,12 +102,12 @@ class ProfileViewController: UIViewController {
                     if let userData = snapshot.value as? [String: Any],
                        let username = userData["username"] as? String {
                         self.usernameLabel.text = username
-                        print(username)
                     }
                 }
     }
 
 }
+
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -125,29 +125,43 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         profileImageView.clipsToBounds=true
         profileImageView.layer.cornerRadius = profileImageView.frame.height/2
         profileImageView.image = profileImage.image
-        if let currentUserID = Auth.auth().currentUser?.uid {
-                let likesRef = Database.database().reference(withPath: "jokes/\(joke.id)/likes/\(currentUserID)")
-                likesRef.observeSingleEvent(of: .value, with: { snapshot in
-                    if snapshot.exists() {
-                        likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                    } else {
-                        likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
-                    }
-                })
-            } else {
-                likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
-            }
+
+//        if let currentUserID = Auth.auth().currentUser?.uid {
+//                let likesRef = Database.database().reference(withPath: "jokes/\(joke.id)/likes/\(currentUserID)")
+//                likesRef.observeSingleEvent(of: .value, with: { snapshot in
+//                    if snapshot.exists() {
+//                        likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+//                    } else {
+//                        likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+//                    }
+//                })
+//            } else {
+//                likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+//            }
+        
         likeButton.addTarget(self, action: #selector(likeTap(_:)), for: .touchUpInside)
         username.text = joke.author
         text.text = joke.text
         likesCount.text = "\(joke.likes.count-1)"
+        let likesRef = Database.database().reference(withPath: "jokes/\(joke.id)/likes")
+        likesRef.observeSingleEvent(of: .value, with: { snapshot in
+            let likes = snapshot.value as! [String:Bool]
+            likesCount.text = "\(likes.count-1)"
+            joke.likes = likes
+            if let _ = joke.likes[Auth.auth().currentUser!.uid] {
+                likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            }
+            else {
+                likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            }
+        })
         return cell
     }
     
     @objc func likeTap(_ sender: UIButton) {
         guard let indexPath = self.tableView.indexPath(for: sender.superview!.superview! as! JokeTableViewCell) else { return }
         let joke = Jokes[Jokes.count-1 - indexPath.row]
-        DataService().like(jokeId: joke.id, button: sender)
+        DataService().like(joke: joke, button: sender, tableView: self.tableView, indexPath: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -16,15 +16,15 @@ class JokesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadUserJokes()
+        loadJokes()
     }
     override func viewDidAppear(_ animated: Bool) {
-        loadUserJokes()
+        self.tableView.reloadData()
     }
     
-    func loadUserJokes(){
+    func loadJokes(){
         let jokesRef = Database.database().reference().child("jokes")
-        jokesRef.observe(.value, with: { snapshot  in
+        jokesRef.observeSingleEvent(of: .value, with: { snapshot  in
             self.Jokes = []
             for child in snapshot.children {
                 let jokeSnapshot = child as! DataSnapshot
@@ -60,49 +60,60 @@ extension JokesViewController: UITableViewDelegate, UITableViewDataSource {
         let text = cell.viewWithTag(2) as! UITextView
         let likesCount = cell.viewWithTag(3) as! UILabel
         let likeButton = cell.viewWithTag(4) as! UIButton
-        if let currentUserID = Auth.auth().currentUser?.uid {
-            let likesRef = Database.database().reference(withPath: "jokes/\(joke.id)/likes/\(currentUserID)")
-            likesRef.observeSingleEvent(of: .value, with: { snapshot in
-                    if snapshot.exists() {
-                        likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                    } else {
-                        likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
-                    }
-            })
-        } else {
-            likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
-        }
         likeButton.addTarget(self, action: #selector(likeTap(_:)), for: .touchUpInside)
         
         
-        let userProfileImage = cell.viewWithTag(5) as! UIImageView
-        userProfileImage.clipsToBounds = true
-        userProfileImage.layer.cornerRadius = userProfileImage.frame.height/2
-        let ref = Database.database().reference().child("users").child("\(joke.author_uid)").child("profileImageURL")
-        ref.observeSingleEvent(of: .value, with: {snapshot in
-            if let value = snapshot.value as? String {
-                if let url = URL(string: value){
-                    URLSession.shared.dataTask(with: url) { (data, response, error) in
-                        DispatchQueue.main.async {
-                            guard let imageData = data else { return }
-                            userProfileImage.image = UIImage(data: imageData)
-                        }
-                    }.resume()
-                }
-            }
-        })
+//        let userProfileImage = cell.viewWithTag(5) as! UIImageView
+//        userProfileImage.clipsToBounds = true
+//        userProfileImage.layer.cornerRadius = userProfileImage.frame.height/2
+//        let ref = Database.database().reference().child("users").child("\(joke.author_uid)").child("profileImageURL")
+//        ref.observeSingleEvent(of: .value, with: {snapshot in
+//            if let value = snapshot.value as? String {
+//                if let url = URL(string: value){
+//                    URLSession.shared.dataTask(with: url) { (data, response, error) in
+//                        DispatchQueue.main.async {
+//                            guard let imageData = data else { return }
+//                            userProfileImage.image = UIImage(data: imageData)
+//                        }
+//                    }.resume()
+//                }
+//            }
+//        })
         username.text = joke.author
         likesCount.text = "\(joke.likes.count-1)"
+        let likesRef = Database.database().reference(withPath: "jokes/\(joke.id)/likes")
+        likesRef.observeSingleEvent(of: .value, with: { snapshot in
+            let likes = snapshot.value as! [String:Bool]
+            likesCount.text = "\(likes.count-1)"
+            joke.likes = likes
+            if let currentUserID = Auth.auth().currentUser?.uid {
+                if let _ = joke.likes[Auth.auth().currentUser!.uid] {
+                    likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                }
+                else {
+                    likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                }
+    //            let likesRef = Database.database().reference(withPath: "jokes/\(joke.id)/likes/\(currentUserID)")
+    //            likesRef.observeSingleEvent(of: .value, with: { snapshot in
+    //                    if snapshot.exists() {
+    //                        likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+    //                    } else {
+    //                        likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+    //                    }
+    //            })
+            } else {
+                likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            }
+        })
         text.text = joke.text
         return cell
     }
     
     
     @objc func likeTap(_ sender: UIButton) {
-        print("button tap")
         guard let indexPath = self.tableView.indexPath(for: sender.superview!.superview! as! JokeTableViewCell) else { return }
         let joke = Jokes[Jokes.count-1 - indexPath.row]
-        DataService().like(jokeId: joke.id, button: sender)
+        DataService().like(joke: joke, button: sender, tableView: self.tableView, indexPath: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
