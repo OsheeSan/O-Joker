@@ -14,6 +14,8 @@ class JokesViewController: UIViewController {
     
     var Jokes: [Joke] = []
     
+    var cache = CacheService()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(cgColor: CGColor(red: 25/255, green: 26/255, blue: 30/255, alpha: 1))
@@ -40,6 +42,19 @@ class JokesViewController: UIViewController {
                     print("Joke info get error")
                     return
                 }
+                let ref = Database.database().reference().child("users").child(author_uid as! String).child("profileImageURL")
+                        ref.observeSingleEvent(of: .value, with: {snapshot in
+                            if let value = snapshot.value as? String {
+                                if let url = URL(string: value){
+                                    URLSession.shared.dataTask(with: url) { (data, response, error) in
+                                        DispatchQueue.main.async {
+                                            guard let imageData = data else { return }
+                                            self.cache.ProfileImagesCache[author_uid as! String] = UIImage(data: imageData)!
+                                        }
+                                    }.resume()
+                                }
+                            }
+                        })
                 let joke = Joke(id: jokeSnapshot.key, text: text as! String, authorUID: author_uid as! String, likes:likes as! [String: Bool], author: author as! String)
                 self.Jokes.append(joke)
             }
@@ -67,10 +82,10 @@ extension JokesViewController: UITableViewDelegate, UITableViewDataSource {
         let likeButton = cell.viewWithTag(4) as! UIButton
         likeButton.addTarget(self, action: #selector(likeTap(_:)), for: .touchUpInside)
         
-        
-//        let userProfileImage = cell.viewWithTag(5) as! UIImageView
-//        userProfileImage.clipsToBounds = true
-//        userProfileImage.layer.cornerRadius = userProfileImage.frame.height/2
+        let userProfileImage = cell.viewWithTag(5) as! UIImageView
+        userProfileImage.clipsToBounds = true
+        userProfileImage.layer.cornerRadius = userProfileImage.frame.height/2
+        userProfileImage.image = cache.ProfileImagesCache[joke.author_uid]
 //        let ref = Database.database().reference().child("users").child("\(joke.author_uid)").child("profileImageURL")
 //        ref.observeSingleEvent(of: .value, with: {snapshot in
 //            if let value = snapshot.value as? String {
@@ -91,21 +106,13 @@ extension JokesViewController: UITableViewDelegate, UITableViewDataSource {
             let likes = snapshot.value as! [String:Bool]
             likesCount.text = "\(likes.count-1)"
             joke.likes = likes
-            if let currentUserID = Auth.auth().currentUser?.uid {
+            if (Auth.auth().currentUser?.uid) != nil {
                 if let _ = joke.likes[Auth.auth().currentUser!.uid] {
                     likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
                 }
                 else {
                     likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
                 }
-    //            let likesRef = Database.database().reference(withPath: "jokes/\(joke.id)/likes/\(currentUserID)")
-    //            likesRef.observeSingleEvent(of: .value, with: { snapshot in
-    //                    if snapshot.exists() {
-    //                        likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-    //                    } else {
-    //                        likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
-    //                    }
-    //            })
             } else {
                 likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
             }
@@ -126,18 +133,22 @@ extension JokesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 2.5
+        return 10
     }
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
-        headerView.backgroundColor = .clear
-//
-//        // Add some space between each header view
-//        let spacingView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 10))
-//        spacingView.backgroundColor = .clear
-//        headerView.addSubview(spacingView)
-        
-        return headerView
+        if section > 0 {
+            let headerView = UIView()
+            headerView.backgroundColor = .clear
+            let line = UIView(frame: CGRect(x: 15, y: Int(headerView.bounds.minY), width: Int(view.bounds.width)-30, height: 3))
+            line.clipsToBounds = true
+            line.layer.cornerRadius = line.frame.height/2
+            line.backgroundColor = UIColor(red: 255/255, green: 196/255, blue: 18/255, alpha: 1)
+            headerView.addSubview(line)
+            return headerView
+        } else {
+            return nil
+        }
     }
     
 }

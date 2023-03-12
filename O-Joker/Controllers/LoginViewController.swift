@@ -9,7 +9,7 @@ import UIKit
 import Firebase
 
 class LoginViewController: UIViewController {
-
+    
     @IBOutlet weak var emailTextField: UITextField!
     
     @IBOutlet weak var passwordTextfield: UITextField!
@@ -20,17 +20,16 @@ class LoginViewController: UIViewController {
             return
         }
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
-                if let error = error {
-                    print("Error signing in: \(error.localizedDescription)")
-                    return
-                }
-                
-                // User signed in successfully
-                print("User signed in with UID: \(result!.user.uid)")
+            if let error = error {
+                print("Error signing in: \(error.localizedDescription)")
+                return
             }
-        if Auth.auth().currentUser != nil {
-                    performSegue(withIdentifier: "login", sender: self)
-                }
+            if Auth.auth().currentUser != nil {
+                self.performSegue(withIdentifier: "login", sender: self)
+            }
+            // User signed in successfully
+            print("User signed in with UID: \(result!.user.uid)")
+        }
     }
     
     var ref = DatabaseReference.init()
@@ -57,6 +56,6 @@ class LoginViewController: UIViewController {
     func hideKeyboardRecognizer(){
         view.addGestureRecognizer(UITapGestureRecognizer(target: view, action: #selector(view.endEditing)))
     }
-
+    
 }
 

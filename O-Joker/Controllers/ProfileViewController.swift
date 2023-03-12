@@ -37,6 +37,7 @@ class ProfileViewController: UIViewController {
         loadUserJokes()
         loadUser()
         view.backgroundColor = UIColor(cgColor: CGColor(red: 25/255, green: 26/255, blue: 30/255, alpha: 1))
+        self.usernameLabel.font =  UIFont(name: "Avenir", size: 20)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -46,6 +47,8 @@ class ProfileViewController: UIViewController {
     func loadUser(){
         profileImage.clipsToBounds = true
         profileImage.layer.cornerRadius = profileImage.frame.height/2
+        profileImage.layer.borderColor = UIColor(red: 255/255, green: 196/255, blue: 18/255, alpha: 1).cgColor
+        profileImage.layer.borderWidth = 0.5
         var ref = Database.database().reference().child("users").child("\(Auth.auth().currentUser!.uid)").child("profileImageURL")
         _ = ref.observe(.value, with: {snapshot in
             print("1")
@@ -145,6 +148,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         
         likeButton.addTarget(self, action: #selector(likeTap(_:)), for: .touchUpInside)
         username.text = joke.author
+        username.font =  UIFont(name: "Avenir", size: 20)
         text.text = joke.text
         likesCount.text = "\(joke.likes.count-1)"
         let likesRef = Database.database().reference(withPath: "jokes/\(joke.id)/likes")
@@ -173,11 +177,16 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 2.5
+        return 10
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
         headerView.backgroundColor = .clear
+        let line = UIView(frame: CGRect(x: 15, y: Int(headerView.bounds.minY), width: Int(view.bounds.width)-30, height: 3))
+        line.clipsToBounds = true
+        line.layer.cornerRadius = line.frame.height/2
+        line.backgroundColor = UIColor(red: 255/255, green: 196/255, blue: 18/255, alpha: 1)
+        headerView.addSubview(line)
 //
 //        // Add some space between each header view
 //        let spacingView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 10))
