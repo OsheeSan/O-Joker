@@ -1,23 +1,14 @@
 //
-//  ProfileViewController.swift
+//  AnotherProfileViewController.swift
 //  O-Joker
 //
-//  Created by admin on 23.02.2023.
+//  Created by admin on 19.03.2023.
 //
 
 import UIKit
 import Firebase
 
-class ProfileViewController: UIViewController {
-
-    @IBAction func quit(_ sender: UIButton) {
-        do { try Auth.auth().signOut()
-        } catch {
-            print("Error sign out")
-        }
-        print("tap")
-        self.dismiss(animated: true)
-    }
+class AnotherProfileViewController: UIViewController {
     
     @IBOutlet weak var profileImage: UIImageView!
     
@@ -29,19 +20,23 @@ class ProfileViewController: UIViewController {
     
     var Jokes: [Joke] = []
     
+    var profilePhoto : UIImage = UIImage() {
+        didSet {
+            self.profileImage.image = profilePhoto
+            tableView.reloadData()
+        }
+    }
+    
+    var user_id = ""
     var userName = ""
     var likesCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadUserJokes()
         loadUser()
+        loadUserJokes()
         view.backgroundColor = UIColor(cgColor: CGColor(red: 25/255, green: 26/255, blue: 30/255, alpha: 1))
         self.usernameLabel.font =  UIFont(name: "Avenir", size: 20)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        tableView.reloadData()
     }
     
     func loadUser(){
@@ -49,18 +44,15 @@ class ProfileViewController: UIViewController {
         profileImage.layer.cornerRadius = profileImage.frame.height/2
         profileImage.layer.borderColor = UIColor(red: 255/255, green: 196/255, blue: 18/255, alpha: 1).cgColor
         profileImage.layer.borderWidth = 0.5
-        let ref = Database.database().reference().child("users").child("\(Auth.auth().currentUser!.uid)").child("profileImageURL")
-        _ = ref.observe(.value, with: {snapshot in
-            print("1")
+        let ref = Database.database().reference().child("users").child(user_id).child("profileImageURL")
+        ref.observeSingleEvent(of: .value, with: {snapshot in
             if let value = snapshot.value as? String {
-                print("2")
-                print(value)
                 if let url = URL(string: value){
                     URLSession.shared.dataTask(with: url) { (data, response, error) in
                         DispatchQueue.main.async {
                             guard let imageData = data else { return }
-                            self.profileImage.image = UIImage(data: imageData)
-                            self.tableView.reloadData()
+                            self.profilePhoto = UIImage(data: imageData)!
+//                            self.tableView.reloadData()
                         }
                     }.resume()
                 }
@@ -87,7 +79,7 @@ class ProfileViewController: UIViewController {
                     return
                 }
                 let joke = Joke(id: jokeSnapshot.key, text: text as! String, authorUID: author_uid as! String, likes:likes as! [String: Bool], author: author as! String)
-                if author_uid as! String == Auth.auth().currentUser!.uid {
+                if author_uid as! String == self.user_id {
                     self.Jokes.append(joke)
                     self.likesCount += (likes as! [String: Bool]).count-1
                     print("Joke added")
@@ -99,20 +91,20 @@ class ProfileViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
                 let usersRef = Database.database().reference().child("users")
-                let currentUserRef = usersRef.child(currentUserId)
+                let currentUserRef = usersRef.child(user_id)
                 currentUserRef.observeSingleEvent(of: .value) { (snapshot) in
                     if let userData = snapshot.value as? [String: Any],
                        let username = userData["username"] as? String {
                         self.usernameLabel.text = username
                     }
                 }
+        tableView.reloadData()
     }
 
 }
 
-extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
+extension AnotherProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return Jokes.count
@@ -132,12 +124,14 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         let profileImageView = cell.viewWithTag(5) as! UIImageView
         profileImageView.clipsToBounds=true
         profileImageView.layer.cornerRadius = profileImageView.frame.height/2
-        profileImageView.image = profileImage.image
+        profileImageView.image = profilePhoto
         likeButton.addTarget(self, action: #selector(likeTap(_:)), for: .touchUpInside)
         username.text = joke.author
         username.font =  UIFont(name: "Avenir", size: 20)
         text.text = joke.text
+        
         likesCount.text = "\(joke.likes.count-1)"
+        
         let likesRef = Database.database().reference(withPath: "jokes/\(joke.id)/likes")
         likesRef.observeSingleEvent(of: .value, with: { snapshot in
             let likes = snapshot.value as! [String:Bool]
@@ -150,6 +144,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
                 likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
             }
         })
+        print("Joke : \(joke.text)\nLikes: \(joke.likes.count-1)")
         return cell
     }
     
@@ -173,13 +168,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         line.clipsToBounds = true
         line.layer.cornerRadius = line.frame.height/2
         line.backgroundColor = UIColor(red: 255/255, green: 196/255, blue: 18/255, alpha: 1)
-        headerView.addSubview(line)
-//
-//        // Add some space between each header view
-//        let spacingView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 10))
-//        spacingView.backgroundColor = .clear
-//        headerView.addSubview(spacingView)
-        
+        headerView.addSubview(line)        
         return headerView
     }
 }

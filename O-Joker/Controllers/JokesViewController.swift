@@ -82,23 +82,16 @@ extension JokesViewController: UITableViewDelegate, UITableViewDataSource {
         let likeButton = cell.viewWithTag(4) as! UIButton
         likeButton.addTarget(self, action: #selector(likeTap(_:)), for: .touchUpInside)
         
+        
         let userProfileImage = cell.viewWithTag(5) as! UIImageView
         userProfileImage.clipsToBounds = true
         userProfileImage.layer.cornerRadius = userProfileImage.frame.height/2
-        userProfileImage.image = cache.ProfileImagesCache[joke.author_uid]
-//        let ref = Database.database().reference().child("users").child("\(joke.author_uid)").child("profileImageURL")
-//        ref.observeSingleEvent(of: .value, with: {snapshot in
-//            if let value = snapshot.value as? String {
-//                if let url = URL(string: value){
-//                    URLSession.shared.dataTask(with: url) { (data, response, error) in
-//                        DispatchQueue.main.async {
-//                            guard let imageData = data else { return }
-//                            userProfileImage.image = UIImage(data: imageData)
-//                        }
-//                    }.resume()
-//                }
-//            }
-//        })
+            
+        userProfileImage.image = self.cache.ProfileImagesCache[joke.author_uid]
+        userProfileImage.isUserInteractionEnabled = true
+        
+        userProfileImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showProfile(_:))))
+        
         username.text = joke.author
         likesCount.text = "\(joke.likes.count-1)"
         let likesRef = Database.database().reference(withPath: "jokes/\(joke.id)/likes")
@@ -121,6 +114,21 @@ extension JokesViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showProfile" {
+            let controller = segue.destination as! AnotherProfileViewController
+            let joke = sender as! Joke
+            controller.user_id = joke.author_uid
+        }
+    }
+    
+    @objc func showProfile(_ sender: UITapGestureRecognizer) {
+        let imageView = sender.view as! UIImageView
+        guard let indexPath = self.tableView.indexPath(for: imageView.superview!.superview! as! JokeTableViewCell) else { return }
+        let joke = Jokes[Jokes.count-1 - indexPath.section]
+        print("User tap")
+        performSegue(withIdentifier: "showProfile", sender: joke)
+    }
     
     @objc func likeTap(_ sender: UIButton) {
         guard let indexPath = self.tableView.indexPath(for: sender.superview!.superview! as! JokeTableViewCell) else { return }
